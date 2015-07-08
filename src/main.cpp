@@ -1,6 +1,6 @@
 #include <Poco/File.h>
 #include <Poco/SharedMemory.h>
-#include <Poco/DataTimeParser.h>
+#include <Poco/DateTimeParser.h>
 
 #include "Poco/Data/Session.h"
 #include "Poco/Data/MySQL/Connector.h"
@@ -74,7 +74,7 @@ char* parse(char* begin, char* end, LockFrame& lock_frame, bool& error)
   }
 
   offset++;
-  lock_frame.message_id_ = to_str(*offset) + to_str(*(offset + 1));
+  lock_frame.message_id = to_str(*offset) + to_str(*(offset + 1));
 
   string phone_num;
   for (int i = 4; i < 10; ++i) {
@@ -101,7 +101,7 @@ int main(int argc, char** argv)
   File f("raw_data.dat");
   SharedMemory mem(f, SharedMemory::AM_READ);
 
-  for (char* ptr = mem.begin(); ptr != mem.(); ++ptr) {
+  for (char* ptr = mem.begin(); ptr != mem.end(); ++ptr) {
 
   }
 
