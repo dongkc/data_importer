@@ -96,6 +96,7 @@ int main(int argc, char** argv)
 
   session << "CREATE TABLE IF NOT EXISTS gps_data(lock_id VARCHAR(12), timestamp TIMESTAMP, message_id VARCHAR(4), frame blob)", now;
   LOG(INFO) << "CREATE TABLE DONE";
+  Statement insert(session);
 
   File f("raw_data.dat");
   SharedMemory mem(f, SharedMemory::AM_READ);
@@ -108,6 +109,13 @@ int main(int argc, char** argv)
       LOG(ERROR) << "Parse frame error";
       break;
     }
+
+    insert << "INSERT INTO gps_data VALUES(?, ?, ?, ?)",
+              use(frame.lock_id),
+              use(frame.datetime),
+              use(frame.message_id),
+              use(frame.frame);
+    insert.execute();
   }
 
   return 0;
